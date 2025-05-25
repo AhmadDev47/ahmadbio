@@ -43,7 +43,7 @@ const userId = config.discordId || "1146773764705636362"; // fallback
             const decoration = user.avatar_decoration;
             const userId = user.id;
 
-            const avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${avatar}.png?size=128`;
+            const avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${avatar}.gif?size=128`;
             const decorationUrl = decoration 
                 ? `https://cdn.discordapp.com/avatar-decorations/${userId}/${decoration}.png` 
                 : null;
