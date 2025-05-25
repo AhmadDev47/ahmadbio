@@ -186,7 +186,7 @@ fetch(webhookUrl, {
   localStorage.setItem("profileConfig", JSON.stringify(config));
 
   // ✅ Save music globally on backend
-  fetch("http://localhost:3000/api/music", {
+  fetch("https://b1o.ahmad47.de/api/music", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ url: config.musicUrl })
