@@ -146,7 +146,7 @@
      <div id="view-count">👁 <span id="views">323</span></div>
         </div>
         
-        <audio id="backgroundsong" src="./hi/SpotiDownloader.com - So🤞 - Bonez MC.mp3" loop autoplay></audio>
+  
 
         <div class="volume-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48">
@@ -240,19 +240,22 @@
                     video.load(); // reload video element
                   }
                 });
-              </script>
-              <audio id="backgroundsong" autoplay loop></audio>
-              <script>
-                fetch("/api/music")
-                  .then(res => res.json())
-                  .then(data => {
-                    const audio = document.getElementById("backgroundsong");
-                    if (audio && data.url) {
-                      audio.src = data.url;
-                      audio.load();
-                      audio.play().catch(err => console.warn("Autoplay blocked:", err));
-                    }
-                  });
+  // Load music URL from your hosted Node.js server
+  fetch("https://b1o.ahmad47.de/api/music")
+    .then(res => res.json())
+    .then(data => {
+      const audio = document.getElementById("backgroundsong");
+      if (audio && data.url) {
+        audio.src = data.url;
+        audio.load();
+        audio.play().catch(err => {
+          console.warn("🎧 Autoplay blocked:", err);
+        });
+      }
+    })
+    .catch(err => {
+      console.error("❌ Failed to fetch music URL:", err);
+    });
               </script>
               
               
