@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Developers</title>
+    <style>
+        :root {
+            --primary: #4db8ff;
+            --primary-light: #a2d9ff;
+            --primary-dark: #3a8bc8;
+            --bg: #0b0c10;
+            --bg-gradient: linear-gradient(135deg, #0b0c10 0%, #161a24 100%);
+            --card-bg: rgba(28, 31, 38, 0.7);
+            --card-bg-hover: rgba(37, 42, 52, 0.8);
+            --text: #ffffff;
+            --text-secondary: rgba(176, 176, 176, 0.8);
+            --success: #28a745;
+            --danger: #dc3545;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glow: 0 0 15px rgba(77, 184, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(77, 184, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(220, 53, 69, 0.1) 0%, transparent 40%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle, rgba(77, 184, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 120s linear infinite;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            text-align: center;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+            text-shadow: var(--glow);
+            opacity: 0;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            padding: 0 1rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent 90%);
+            border-radius: 3px;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        h1:hover::after {
+            transform: scaleX(1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 2rem;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .member {
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .member:nth-child(1) { animation-delay: 0.1s; }
+        .member:nth-child(2) { animation-delay: 0.2s; }
+        .member:nth-child(3) { animation-delay: 0.3s; }
+        .member:nth-child(4) { animation-delay: 0.4s; }
+        .member:nth-child(5) { animation-delay: 0.5s; }
+        .member:nth-child(6) { animation-delay: 0.6s; }
+        .member:nth-child(7) { animation-delay: 0.7s; }
+        .member:nth-child(8) { animation-delay: 0.8s; }
+
+        .member::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(77, 184, 255, 0.1), transparent);
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .member::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(0deg);
+            transition: var(--transition);
+            z-index: -2;
+        }
+
+        .member:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), var(--glow);
+            background: var(--card-bg-hover);
+            border-color: rgba(77, 184, 255, 0.3);
+        }
+
+        .member:hover::before {
+            opacity: 1;
+        }
+
+        .member:hover::after {
+            transform: rotate(180deg);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, var(--primary), var(--danger));
+            transition: var(--transition);
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--card-bg);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .member:hover .avatar-container {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(77, 184, 255, 0.4);
+        }
+
+        .member:hover .avatar {
+            border-color: var(--primary-light);
+            transform: rotate(5deg);
+        }
+
+        .username {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            color: var(--text);
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .member:hover .username {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.1s;
+        }
+
+        .role {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            background: var(--glass);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            transform: translateY(10px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .member:hover .role {
+            transform: translateY(0);
+            opacity: 1;
+            transition-delay: 0.2s;
+        }
+
+        .no-members {
+            grid-column: 1/-1;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            padding: 3rem;
+            background: var(--glass);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .error-message {
+            grid-column: 1/-1;
+            text-align: center;
+            color: var(--danger);
+            font-size: 1.3rem;
+            padding: 3rem;
+            background: var(--glass);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 3rem 1rem;
+            }
+            
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .member {
+                padding: 1.5rem 1rem;
+            }
+            
+            .avatar-container {
+                width: 110px;
+                height: 110px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="header-container">
+        <h1>Web Developers 🛠️</h1>
+    </div>
+    <div class="grid" id="member-grid"></div>
+
+    <script>
+        function createMemberCard(member) {
+            const div = document.createElement('div');
+            div.className = 'member';
+            
+            div.innerHTML = `
+                <div class="avatar-container">
+                    <img class="avatar" src="${member.avatar}" alt="${member.username}">
+                </div>
+                <div class="username">${member.username}</div>
+                ${member.role ? `<div class="role">${member.role}</div>` : ''}
+            `;
+            
+            return div;
+        }
+
+        fetch('/api/members')
+            .then(res => res.json())
+            .then(data => {
+                const grid = document.getElementById('member-grid');
+                grid.innerHTML = '';
+        
+                const enabledMembers = data.filter(member => member.enabled);
+                if (enabledMembers.length === 0) {
+                    grid.innerHTML = '<div class="no-members">No enabled members to show</div>';
+                    return;
+                }
+        
+                enabledMembers.forEach(member => {
+                    grid.appendChild(createMemberCard(member));
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load members:', err);
+                document.getElementById('member-grid').innerHTML = '<div class="error-message">Could not load members</div>';
+            });
+    </script>
+</body>
+</html>

@@ -6,7 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const imgElement = document.getElementById('rpc');
     if (imgElement) imgElement.src = imgSrc;
     
-    
+    const { Client, GatewayIntentBits } = require('discord.js');
+const express = require('express');
+const cors = require('cors');
+
+
     
       
       
@@ -14,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const socket = new WebSocket("wss://api.lanyard.rest/socket");
 
 const userId = config.discordId || "1146773764705636362"; // fallback
+
 
 
     socket.onopen = () => {

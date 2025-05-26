@@ -103,57 +103,55 @@
   </div>
 
   <script>
-    const CLIENT_ID = "1373604191377035294"; // Replace with your actual Discord app client ID
+    const CLIENT_ID = "1373604191377035294";
     const REDIRECT_URI = window.location.origin + window.location.pathname;
-    const MY_DISCORD_ID = "1146773764705636362"; // Replace with your actual Discord user ID
+    const MY_DISCORD_ID = "1146773764705636362";
 
     document.getElementById("discordLogin").href =
       `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+
+    let loggedInUser = null;
 
     window.onload = async () => {
       const hash = window.location.hash;
       if (hash.includes("access_token")) {
         const token = new URLSearchParams(hash.slice(1)).get("access_token");
-
         const res = await fetch("https://discord.com/api/users/@me", {
           headers: { Authorization: "Bearer " + token }
         });
         const user = await res.json();
 
         if (user.id === MY_DISCORD_ID) {
+          loggedInUser = user;
           document.getElementById("auth-section").style.display = "none";
           document.getElementById("dashboard").style.display = "block";
           document.getElementById("user-info").style.display = "block";
 
-          const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.gif?size=128`;
+          const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`;
           document.getElementById("user-avatar").src = avatarUrl;
           document.getElementById("avatar-link").href = `https://discord.com/users/${user.id}`;
           document.getElementById("user-name").textContent = `${user.username}#${user.discriminator}`;
 
-    // ✅ Send login to Discord webhook
-    const webhookUrl = "https://discord.com/api/webhooks/1376169169606807652/qdQgy49PRN0RqiGb_lS_eSwUnsqH_S_uE6EPphJOG9cI98TyWsRzauZqFFC2uK_tdvhA"; // Replace this
+          // Send login to Discord webhook
+          const webhookUrl = "https://discord.com/api/webhooks/1376169169606807652/qdQgy49PRN0RqiGb_lS_eSwUnsqH_S_uE6EPphJOG9cI98TyWsRzauZqFFC2uK_tdvhA";
 
-fetch(webhookUrl, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    embeds: [{
-      title: "🔐 Dashboard Login",
-      color: 0x5865f2,
-      fields: [
-        { name: "Username", value: `${user.username}#${user.discriminator}`, inline: true },
-        { name: "User ID", value: user.id, inline: true },
-        { name: "Time", value: new Date().toLocaleString(), inline: false }
-      ],
-      footer: {
-        text: "Secure Dashboard Access Log"
-      }
-    }]
-  })
-});
-} else {
+          fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              embeds: [{
+                title: "🔐 Dashboard Login",
+                color: 0x5865f2,
+                fields: [
+                  { name: "Username", value: `${user.username}#${user.discriminator}`, inline: true },
+                  { name: "User ID", value: user.id, inline: true },
+                  { name: "Time", value: new Date().toLocaleString(), inline: false }
+                ],
+                footer: { text: "Secure Dashboard Access Log" }
+              }]
+            })
+          });
+        } else {
           document.getElementById("auth-section").innerHTML = "<h2>❌ Access Denied</h2>";
         }
       }
@@ -166,42 +164,46 @@ fetch(webhookUrl, {
     }
 
     function saveConfig() {
-  const config = {
-    username: document.getElementById("username").value,
-    bio: document.getElementById("bio").value,
-    avatarUrl: document.getElementById("avatarUrl").value,
-    profileName: document.getElementById("profileName").value,
-    profileSubtitle: document.getElementById("profileSubtitle").value,
-    profileTagline: document.getElementById("profileTagline").value,
-    bgVideo: document.getElementById("bgVideo").value,
-    musicUrl: document.getElementById("musicUrl").value,
-    discordId: document.getElementById("discordId").value,
-    spotifyEmbed: document.getElementById("spotifyEmbed").value,
-    effects: document.getElementById("effects").value,
-    tilt: document.getElementById("enableTilt").checked,
-    socials: JSON.parse(document.getElementById("socials").value)
-  };
+      const config = {
+        username: document.getElementById("username").value,
+        bio: document.getElementById("bio").value,
+        avatarUrl: document.getElementById("avatarUrl").value,
+        profileName: document.getElementById("profileName").value,
+        profileSubtitle: document.getElementById("profileSubtitle").value,
+        profileTagline: document.getElementById("profileTagline").value,
+        bgVideo: document.getElementById("bgVideo").value,
+        musicUrl: document.getElementById("musicUrl").value,
+        discordId: document.getElementById("discordId").value,
+        spotifyEmbed: document.getElementById("spotifyEmbed").value,
+        effects: document.getElementById("effects").value,
+        tilt: document.getElementById("enableTilt").checked,
+        socials: JSON.parse(document.getElementById("socials").value)
+      };
 
-  // ✅ Save locally
-  localStorage.setItem("profileConfig", JSON.stringify(config));
-
-  // ✅ Save music globally on backend
-  fetch("https://b1o.ahmad47.de/api/music", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url: config.musicUrl })
-  })
-  .then(() => {
-    alert("✅ Settings saved. Music updated globally.");
-  })
-  .catch((err) => {
-    console.error("❌ Failed to save music URL to server:", err);
-    alert("⚠️ Music not saved to server. Check console.");
-  });
-
-        
-      
       localStorage.setItem("profileConfig", JSON.stringify(config));
+
+      fetch("https://b1o.ahmad47.de/api/music", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: config.musicUrl })
+      })
+      .then(() => {
+        alert("✅ Settings saved. Music updated globally.");
+      })
+      .catch((err) => {
+        console.error("❌ Failed to save music URL to server:", err);
+        alert("⚠️ Music not saved to server. Check console.");
+      });
+
+      // ✅ Log save event to Discord webhook
+      fetch("https://discord.com/api/webhooks/1376169169606807652/qdQgy49PRN0RqiGb_lS_eSwUnsqH_S_uE6EPphJOG9cI98TyWsRzauZqFFC2uK_tdvhA", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: `📝 Config was saved by ${loggedInUser?.username}#${loggedInUser?.discriminator} at ${new Date().toLocaleString()}`
+        })
+      });
+
       alert("✅ Settings saved to localStorage. Reload index.html to see changes.");
     }
 
@@ -210,5 +212,6 @@ fetch(webhookUrl, {
       alert("⚠️ Settings cleared. Reload to reset.");
     }
   </script>
+  
 </body>
 </html>
