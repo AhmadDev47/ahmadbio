@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 
 const PORT = 3000;
-const TOKEN = 'MTM3MzYwNDE5MTM3NzAzNTI5NA.GEV2Le.umCHOJJEQXTawQb-M77oV1yInSOMjYIId6jmMo';
+const TOKEN = process.env.DISCORD_TOKEN;
 const GUILD_ID = '1369340935829459006'; // Replace with your server ID
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
