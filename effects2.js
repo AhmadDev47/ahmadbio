@@ -85,7 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         gameImageUrl = `https://cdn.discordapp.com/app-assets/${appId}/${imgId}.png`;
                     }
                 } else {
-                    gameImageUrl = "./fallback-game.png";
+                    gameImageUrl = avatar.startsWith("a_")
+                    ? `https://cdn.discordapp.com/avatars/${userId}/${avatar}.gif?size=128`
+                    : `https://cdn.discordapp.com/avatars/${userId}/${avatar}.png?size=128`;
                 }
 
                 activityElement.innerHTML = `
